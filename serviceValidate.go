@@ -6,22 +6,16 @@ import (
 
 type CAS struct {
 	domain string
-	secret string
 }
 
-func New(domain string, secret string) *CAS {
+func New(domain string) *CAS {
 	return &CAS{
 		domain: domain,
-		secret: secret,
 	}
 }
 
 func (c *CAS) SetDomain(domain string) {
 	c.domain = domain
-}
-
-func (c *CAS) SetSecret(secret string) {
-	c.secret = secret
 }
 
 func (c *CAS) GetLoginURL(redirectURL string) string {
