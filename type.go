@@ -1,4 +1,4 @@
-package juanjiCAS_Go_SDK
+package juanjiCAS
 
 import (
 	"encoding/xml"
