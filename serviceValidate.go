@@ -4,20 +4,6 @@ import (
 	"github.com/guonaihong/gout"
 )
 
-type CAS struct {
-	domain string
-}
-
-func New(domain string) *CAS {
-	return &CAS{
-		domain: domain,
-	}
-}
-
-func (c *CAS) SetDomain(domain string) {
-	c.domain = domain
-}
-
 func (c *CAS) GetLoginURL(redirectURL string) string {
 	return c.domain + "/login?service=" + redirectURL
 }
