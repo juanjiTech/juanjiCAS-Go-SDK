@@ -5,22 +5,40 @@ import (
 )
 
 func (c *CAS) GetLoginURL(redirectURL string) string {
-	return c.domain + "/login?service=" + redirectURL
+	u := c.domain.JoinPath("/login")
+	q := u.Query()
+	q.Set("service", redirectURL)
+	u.RawQuery = q.Encode()
+	return u.String()
 }
 
 func (c *CAS) GetLogoutURL(redirectURL string) string {
-	return c.domain + "/logout?service=" + redirectURL
+	u := c.domain.JoinPath("/logout")
+	q := u.Query()
+	q.Set("service", redirectURL)
+	u.RawQuery = q.Encode()
+	return u.String()
 }
 
 func (c *CAS) GetValidateURL(ticket string, redirectURL string) string {
-	return c.domain + "/serviceValidate?ticket=" + ticket + "&service=" + redirectURL
+	u := c.domain.JoinPath("/serviceValidate")
+	q := u.Query()
+	q.Set("ticket", ticket)
+	q.Set("service", redirectURL)
+	u.RawQuery = q.Encode()
+	return u.String()
 }
 
 // getProxyValidateURL
 // NOT SUPPORT YET
 // deprecated
 func (c *CAS) getProxyValidateURL(ticket string, redirectURL string) string {
-	return c.domain + "/proxyValidate?ticket=" + ticket + "&service=" + redirectURL
+	u := c.domain.JoinPath("/proxyValidate")
+	q := u.Query()
+	q.Set("ticket", ticket)
+	q.Set("service", redirectURL)
+	u.RawQuery = q.Encode()
+	return u.String()
 }
 
 // Validate redirectURL is the service url
