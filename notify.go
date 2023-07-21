@@ -17,7 +17,7 @@ func (c *CAS) Notify(notice *Notice) error {
 		return ErrNotSetSendKey
 	}
 	resp := Resp{}
-	err := gout.POST(c.domain.JoinPath("/api/notify/send/" + c.sendKey).String()).
+	err := gout.POST(c.backend.JoinPath("/api/notify/send/" + c.sendKey).String()).
 		SetJSON(notice).
 		BindJSON(&resp).Do()
 	if err != nil {

@@ -5,7 +5,7 @@ import (
 )
 
 func (c *CAS) GetLoginURL(redirectURL string) string {
-	u := c.domain.JoinPath("/login")
+	u := c.frontend.JoinPath("/login")
 	q := u.Query()
 	q.Set("service", redirectURL)
 	u.RawQuery = q.Encode()
@@ -13,7 +13,7 @@ func (c *CAS) GetLoginURL(redirectURL string) string {
 }
 
 func (c *CAS) GetLogoutURL(redirectURL string) string {
-	u := c.domain.JoinPath("/logout")
+	u := c.frontend.JoinPath("/logout")
 	q := u.Query()
 	q.Set("service", redirectURL)
 	u.RawQuery = q.Encode()
@@ -21,7 +21,7 @@ func (c *CAS) GetLogoutURL(redirectURL string) string {
 }
 
 func (c *CAS) GetValidateURL(ticket string, redirectURL string) string {
-	u := c.domain.JoinPath("/serviceValidate")
+	u := c.backend.JoinPath("/serviceValidate")
 	q := u.Query()
 	q.Set("ticket", ticket)
 	q.Set("service", redirectURL)
@@ -33,7 +33,7 @@ func (c *CAS) GetValidateURL(ticket string, redirectURL string) string {
 // NOT SUPPORT YET
 // deprecated
 func (c *CAS) getProxyValidateURL(ticket string, redirectURL string) string {
-	u := c.domain.JoinPath("/proxyValidate")
+	u := c.backend.JoinPath("/proxyValidate")
 	q := u.Query()
 	q.Set("ticket", ticket)
 	q.Set("service", redirectURL)
