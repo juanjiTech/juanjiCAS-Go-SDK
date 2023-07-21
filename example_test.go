@@ -5,7 +5,7 @@ import (
 )
 
 func TestExample(t *testing.T) {
-	cas := New("https://cas.juanji.tech")
+	cas := New("https://api.cas.juanji.tech")
 	_ = cas.GetLoginURL("https://example.com")
 	_, _ = cas.Validate("ST-1-1-1-1", "https://example.com")
 

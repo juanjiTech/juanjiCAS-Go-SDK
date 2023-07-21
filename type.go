@@ -2,45 +2,71 @@ package juanjiCAS
 
 import (
 	"encoding/xml"
+	"time"
 )
 
-type CASResponse struct {
-	CASServiceResponse `json:"serviceResponse"`
+type CasServiceResponse struct {
+	XMLName      xml.Name `xml:"cas:serviceResponse" json:"-"`
+	Xmlns        string   `xml:"xmlns:cas,attr"`
+	Failure      *CasAuthenticationFailure
+	Success      *CasAuthenticationSuccess
+	ProxySuccess *CasProxySuccess
+	ProxyFailure *CasProxyFailure
 }
 
-type CASServiceResponse struct {
-	XMLName      xml.Name                  `xml:"cas:serviceResponse" json:"-"`
-	Xmlns        string                    `xml:"xmlns:cas,attr" json:"-"`
-	Success      *CASAuthenticationSuccess `json:"authenticationSuccess,omitempty"`
-	Failure      *CASAuthenticationFailure `json:"authenticationFailure,omitempty"`
-	ProxySuccess string                    `xml:"cas:proxyTicket,omitempty" json:"proxyTicket,omitempty"`
-	ProxyFailure *CASProxyFailure          `json:"proxyFailure,omitempty"`
-}
-
-type CASAuthenticationSuccess struct {
-	XMLName    xml.Name      `xml:"cas:authenticationSuccess" json:"-"`
-	User       string        `xml:"cas:user" json:"user"`
-	Attributes CASAttributes `xml:"cas:attributes" json:"attributes"`
-}
-
-type CASAuthenticationFailure struct {
+type CasAuthenticationFailure struct {
 	XMLName xml.Name `xml:"cas:authenticationFailure" json:"-"`
-	Code    string   `xml:"code,attr" json:"code"`
-	Desc    string   `xml:",chardata" json:"description"`
+	Code    string   `xml:"code,attr"`
+	Message string   `xml:",innerxml"`
 }
 
-type CASPgtIou struct {
-	XMLName xml.Name `xml:"cas:proxyGrantingTicket" json:"-"`
-	Ticket  string   `xml:",chardata" json:"ticket"`
+type CasAuthenticationSuccess struct {
+	XMLName             xml.Name           `xml:"cas:authenticationSuccess" json:"-"`
+	User                string             `xml:"cas:user"`
+	ProxyGrantingTicket string             `xml:"cas:proxyGrantingTicket,omitempty"`
+	Proxies             *CasProxies        `xml:"cas:proxies"`
+	Attributes          *CasAttributes     `xml:"cas:attributes"`
+	ExtraAttributes     []*CasAnyAttribute `xml:",any"`
 }
 
-type CASAttributes struct {
-	XMLName xml.Name `xml:"cas:attributes" json:"-"`
-	Email   string   `xml:"email" json:"email"`
+type CasProxies struct {
+	XMLName xml.Name `xml:"cas:proxies" json:"-"`
+	Proxies []string `xml:"cas:proxy"`
 }
 
-type CASProxyFailure struct {
+type CasAttributes struct {
+	XMLName                                xml.Name  `xml:"cas:attributes" json:"-"`
+	AuthenticationDate                     time.Time `xml:"cas:authenticationDate"`
+	LongTermAuthenticationRequestTokenUsed bool      `xml:"cas:longTermAuthenticationRequestTokenUsed"`
+	IsFromNewLogin                         bool      `xml:"cas:isFromNewLogin"`
+	MemberOf                               []string  `xml:"cas:memberOf"`
+	UserAttributes                         *CasUserAttributes
+	ExtraAttributes                        []*CasAnyAttribute `xml:",any"`
+}
+
+type CasUserAttributes struct {
+	XMLName       xml.Name             `xml:"cas:userAttributes" json:"-"`
+	Attributes    []*CasNamedAttribute `xml:"cas:attribute"`
+	AnyAttributes []*CasAnyAttribute   `xml:",any"`
+}
+
+type CasNamedAttribute struct {
+	XMLName xml.Name `xml:"cas:attribute" json:"-"`
+	Name    string   `xml:"name,attr,omitempty"`
+	Value   string   `xml:",innerxml"`
+}
+
+type CasAnyAttribute struct {
+	XMLName xml.Name
+	Value   string `xml:",chardata"`
+}
+
+type CasProxySuccess struct {
+	XMLName     xml.Name `xml:"cas:proxySuccess" json:"-"`
+	ProxyTicket string   `xml:"cas:proxyTicket"`
+}
+type CasProxyFailure struct {
 	XMLName xml.Name `xml:"cas:proxyFailure" json:"-"`
-	Code    string   `xml:"string" json:"code"`
-	Desc    string   `xml:",chardata" json:"description"`
+	Code    string   `xml:"code,attr"`
+	Message string   `xml:",innerxml"`
 }

@@ -42,8 +42,8 @@ func (c *CAS) getProxyValidateURL(ticket string, redirectURL string) string {
 }
 
 // Validate redirectURL is the service url
-func (c *CAS) Validate(ticket string, redirectURL string) (CASResponse, error) {
-	casResponse := CASResponse{}
+func (c *CAS) Validate(ticket string, redirectURL string) (CasServiceResponse, error) {
+	casResponse := CasServiceResponse{}
 	err := gout.GET(c.GetValidateURL(ticket, redirectURL) + "&format=JSON").BindJSON(&casResponse).Do()
 	return casResponse, err
 }
